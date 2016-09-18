@@ -20,7 +20,7 @@ This bundle has been tested on the following systems:
 
     'metadata': {
         'firewalld': { 
-            'default_zone': 'public', # optional, add all interfaces to this zone
+            'default_zone': 'internal', # optional, add all interfaces to this zone
             'custom_zones': True, # optional, add each interface to the specified zone
             'ports': [ # optional, add custom ports which will be opened
                 "321/tcp",
@@ -70,6 +70,12 @@ This bundle has been tested on the following systems:
     }
 
 ## Notes
+
+### Adding custom ports
+
+Custom Ports are added either to your `default_zone`, to *all* `custom_zones` or, if none of the options before is set, to the public zone, which is the default zone on Fedora.
+
+### Known issues
 
 Changing the zone of an interface will always end up with an error from bw, e.g.:
 

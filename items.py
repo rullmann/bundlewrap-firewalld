@@ -18,6 +18,21 @@ svc_systemd = {
     },
 }
 
+files = {
+    '/etc/firewalld/firewalld.conf': {
+        'source': "firewalld.conf",
+        'owner': "root",
+        'mode': "0644",
+        'content_type': "mako",
+        'needs': [
+            "pkg_yum:firewalld",
+        ],
+        'triggers': [
+            "action:firewalld_reload",
+        ],
+    },
+}
+
 if node.metadata.get('firewalld', {}).get('default_zone'):
     default_zone = node.metadata.get('firewalld', {}).get('default_zone')
     for interface in node.metadata['interfaces']:
