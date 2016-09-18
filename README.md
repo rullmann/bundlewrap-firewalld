@@ -19,10 +19,19 @@ This bundle has been tested on the following systems:
 ## Metadata
 
     'metadata': {
-        'firewalld': { #optional
-            'ports': [
+        'firewalld': { 
+            'default_zone': 'public', # optional, add all interfaces to this zone
+            'ports': [ # optional, add custom ports which will be opened
                 "321/tcp",
                 "456/udp",
             ],
+        },
+        'interfaces': { # required, to set a default-zone and for other actions
+            'eth0': {
+                'ip_address': '172.16.16.42',
+            },
+            'tun0': {
+                'ip_address': '10.10.10.42',
+            },
         },
     }
