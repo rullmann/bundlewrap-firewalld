@@ -32,6 +32,20 @@ if node.metadata.get('firewalld', {}).get('default_zone'):
                 "action:firewalld_reload",
             ],
         }
+elif node.metadata.get('firewalld', {}).get('custom_zones', False):
+    for interface in node.metadata['interfaces']:
+        custom_zone = node.metadata.get('interfaces', {}).get(interface).get('firewalld_zone')
+        actions['firewalld_set_custom_zone_{}'.format(interface)] = {
+            'command': "firewall-cmd --permanent --zone={} --add-interface={}".format(custom_zone, interface),
+            'unless': "firewall-cmd --list-interfaces --zone={} | grep {}".format(custom_zone, interface),
+            'cascade_skip': False,
+            'needs': [
+                "pkg_yum:firewalld",
+            ],
+            'triggers': [
+                "action:firewalld_reload",
+            ],
+        }
 
 for port in node.metadata.get('firewalld', {}).get('ports', {}):
     actions['firewalld_add_port_{}'.format(port)] = {
