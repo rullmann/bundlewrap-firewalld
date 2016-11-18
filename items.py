@@ -1,4 +1,4 @@
-pkg_yum = {
+pkg_dnf = {
     "firewalld": {},
 }
 
@@ -13,7 +13,7 @@ svc_systemd = {
     'firewalld': {
         'enabled': True,
         'needs': [
-            "pkg_yum:firewalld",
+            "pkg_dnf:firewalld",
         ],
     },
 }
@@ -25,7 +25,7 @@ files = {
         'mode': "0644",
         'content_type': "mako",
         'needs': [
-            "pkg_yum:firewalld",
+            "pkg_dnf:firewalld",
         ],
         'triggers': [
             "action:firewalld_reload",
@@ -41,7 +41,7 @@ if node.metadata.get('firewalld', {}).get('default_zone'):
             'unless': "firewall-cmd --list-interfaces --zone={} | grep {}".format(default_zone, interface),
             'cascade_skip': False,
             'needs': [
-                "pkg_yum:firewalld",
+                "pkg_dnf:firewalld",
             ],
             'triggers': [
                 "action:firewalld_reload",
@@ -55,7 +55,7 @@ elif node.metadata.get('firewalld', {}).get('custom_zones', False):
             'unless': "firewall-cmd --list-interfaces --zone={} | grep {}".format(custom_zone, interface),
             'cascade_skip': False,
             'needs': [
-                "pkg_yum:firewalld",
+                "pkg_dnf:firewalld",
             ],
             'triggers': [
                 "action:firewalld_reload",
@@ -69,7 +69,7 @@ for port in node.metadata.get('firewalld', {}).get('ports', {}):
             'unless': "firewall-cmd --zone={} --list-ports | grep {}".format(default_zone, port),
             'cascade_skip': False,
             'needs': [
-                "pkg_yum:firewalld",
+                "pkg_dnf:firewalld",
             ],
             'triggers': [
                 "action:firewalld_reload",
@@ -83,7 +83,7 @@ for port in node.metadata.get('firewalld', {}).get('ports', {}):
                 'unless': "firewall-cmd --zone={} --list-ports | grep {}".format(custom_zone, port),
                 'cascade_skip': False,
                 'needs': [
-                    "pkg_yum:firewalld",
+                    "pkg_dnf:firewalld",
                 ],
                 'triggers': [
                     "action:firewalld_reload",
@@ -95,7 +95,7 @@ for port in node.metadata.get('firewalld', {}).get('ports', {}):
             'unless': "firewall-cmd --list-ports | grep {}".format(port),
             'cascade_skip': False,
             'needs': [
-                "pkg_yum:firewalld",
+                "pkg_dnf:firewalld",
             ],
             'triggers': [
                 "action:firewalld_reload",
