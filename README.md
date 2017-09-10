@@ -3,15 +3,6 @@
 `bundlewrap-firewalld` installs firewalld. It provides an action to reload firewalld after changes to other bundles.
 Additionally it's possible to open custom ports.
 
-## Compatibility
-
-This bundle has been tested on the following systems:
-
-| OS          | `[x]` |
-| ----------- | ----- |
-| Fedora 24   | `[x]` |
-| Fedberry 23 | `[ ]` |
-
 ## Requirements
 
 (!) Make sure you have access to a remote console in case firewalld denies your access to the system.
