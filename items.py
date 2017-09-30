@@ -11,7 +11,6 @@ actions = {
 
 svc_systemd = {
     'firewalld': {
-        'enabled': True,
         'needs': [
             "pkg_dnf:firewalld",
         ],
@@ -21,7 +20,6 @@ svc_systemd = {
 files = {
     '/etc/firewalld/firewalld.conf': {
         'source': "firewalld.conf",
-        'owner': "root",
         'mode': "0644",
         'content_type': "mako",
         'needs': [
