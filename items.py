@@ -11,9 +11,7 @@ actions = {
 
 svc_systemd = {
     'firewalld': {
-        'needs': [
-            'pkg_dnf:firewalld',
-        ],
+        'needs': ['pkg_dnf:firewalld'],
     },
 }
 
@@ -22,12 +20,8 @@ files = {
         'source': 'firewalld.conf',
         'mode': '0644',
         'content_type': 'mako',
-        'needs': [
-            'pkg_dnf:firewalld',
-        ],
-        'triggers': [
-            'action:firewalld_reload',
-        ],
+        'needs': ['pkg_dnf:firewalld'],
+        'triggers': ['action:firewalld_reload'],
     },
 }
 
@@ -38,12 +32,8 @@ if node.metadata.get('firewalld', {}).get('default_zone'):
             'command': 'firewall-cmd --permanent --zone={} --add-interface={}'.format(default_zone, interface),
             'unless': 'firewall-cmd --list-interfaces --zone={} | grep {}'.format(default_zone, interface),
             'cascade_skip': False,
-            'needs': [
-                'pkg_dnf:firewalld',
-            ],
-            'triggers': [
-                'action:firewalld_reload',
-            ],
+            'needs': ['pkg_dnf:firewalld'],
+            'triggers': ['action:firewalld_reload'],
         }
 elif node.metadata.get('firewalld', {}).get('custom_zones', False):
     for interface in node.metadata['interfaces']:
@@ -52,12 +42,8 @@ elif node.metadata.get('firewalld', {}).get('custom_zones', False):
             'command': 'firewall-cmd --permanent --zone={} --add-interface={}'.format(custom_zone, interface),
             'unless': 'firewall-cmd --list-interfaces --zone={} | grep {}'.format(custom_zone, interface),
             'cascade_skip': False,
-            'needs': [
-                'pkg_dnf:firewalld',
-            ],
-            'triggers': [
-                'action:firewalld_reload',
-            ],
+            'needs': ['pkg_dnf:firewalld'],
+            'triggers': ['action:firewalld_reload'],
         }
 
 for port in node.metadata.get('firewalld', {}).get('ports', {}):
@@ -66,12 +52,8 @@ for port in node.metadata.get('firewalld', {}).get('ports', {}):
             'command': 'firewall-cmd --permanent --zone={} --add-port={}'.format(default_zone, port),
             'unless': 'firewall-cmd --zone={} --list-ports | grep {}'.format(default_zone, port),
             'cascade_skip': False,
-            'needs': [
-                'pkg_dnf:firewalld',
-            ],
-            'triggers': [
-                'action:firewalld_reload',
-            ],
+            'needs': ['pkg_dnf:firewalld'],
+            'triggers': ['action:firewalld_reload'],
         }
     elif node.metadata.get('firewalld', {}).get('custom_zones', False):
         for interface in node.metadata['interfaces']:
@@ -80,22 +62,14 @@ for port in node.metadata.get('firewalld', {}).get('ports', {}):
                 'command': 'firewall-cmd --permanent --zone={} --add-port={}'.format(custom_zone, port),
                 'unless': 'firewall-cmd --zone={} --list-ports | grep {}'.format(custom_zone, port),
                 'cascade_skip': False,
-                'needs': [
-                    'pkg_dnf:firewalld',
-                ],
-                'triggers': [
-                    'action:firewalld_reload',
-                ],
+                'needs': ['pkg_dnf:firewalld'],
+                'triggers': ['action:firewalld_reload'],
             }
     else:
         actions['firewalld_add_port_{}'.format(port)] = {
             'command': 'firewall-cmd --permanent --add-port={}'.format(port),
             'unless': 'firewall-cmd --list-ports | grep {}'.format(port),
             'cascade_skip': False,
-            'needs': [
-                'pkg_dnf:firewalld',
-            ],
-            'triggers': [
-                'action:firewalld_reload',
-            ],
+            'needs': ['pkg_dnf:firewalld'],
+            'triggers': ['action:firewalld_reload'],
         }
